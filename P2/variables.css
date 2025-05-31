@@ -1,0 +1,31 @@
+/*
+ * 主題樣式變數設定 (由 CSS 變數生成器生成)
+ * --------------------------------------------------------------------------
+ */
+:root {
+    --main-title-color: #0056b3; /* main-title-color */
+    --tile-title-color: #007bff; /* tile-title-color */
+    --background-color: #f0f2f5; /* background-color */
+    --container-bg-color: #ffffff; /* container-bg-color */
+    --item-bg-color: #ffffff; /* item-bg-color */
+    --text-color: #333333; /* text-color */
+    --secondary-text-color: #555555; /* secondary-text-color */
+    --border-color: #e0e0e0; /* border-color */
+    --hover-shadow: rgba(0, 0, 0, 0.2);
+    --lightbox-bg-color: rgba(0, 0, 0, 0.95); /* lightbox-bg-color */
+    --lightbox-caption-bg-color: rgba(0, 0, 0, 0.6); /* lightbox-caption-bg-color */
+    --lightbox-text-color: #eeeeee; /* lightbox-text-color */
+    --close-button-color: #ffffff; /* close-button-color */
+    --body-font-size: 16px; /* body-font-size */
+    --main-title-font-size: 2.5em; /* main-title-font-size */
+    --tile-title-font-size: 1.15em; /* tile-title-font-size */
+    --description-font-size: 0.9em; /* description-font-size */
+    --lightbox-title-font-size: 1.3em; /* lightbox-title-font-size */
+    --lightbox-description-font-size: 1.1em; /* lightbox-description-font-size */
+    --close-button-font-size: 50px; /* close-button-font-size */
+    --body-background-image: none; /* 頁面背景圖片 */
+    --body-background-size: auto; /* 背景圖片尺寸 */
+    --body-background-position: center center; /* 背景圖片位置 */
+    --body-background-repeat: repeat; /* 背景圖片重複方式 */
+}
+/* -------------------------------------------------------------------------- */

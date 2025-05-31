@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的圖片藝廊</title> <link rel="stylesheet" href="variables.css">    
+    <style>
+        /* (CSS 樣式保持不變) */
+        body { /* ... */ }
+        h1 { /* ... */ }
+        /* ... 其他 CSS ... */
+    </style>
+</head>
+<body>
+    <h1 id="mainTitle"></h1> 
+    <div id="gallery-container" class="gallery-container"></div>
+
+    <div id="lightbox" class="lightbox">
+        <span class="close-button">&times;</span>
+        <img class="lightbox-content" id="lightbox-img" src="" alt="">
+        <div id="lightbox-caption" class="lightbox-caption"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const galleryContainer = document.getElementById('gallery-container');
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxCaption = document.getElementById('lightbox-caption');
+            const closeButton = document.querySelector('.close-button');
+            const mainTitleElement = document.getElementById('mainTitle');
+
+            // --- 禁止右鍵功能 START ---
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+            });
+            // --- 禁止右鍵功能 END ---
+
+            // 從 JSON 檔案載入資料
+            fetch('images.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // 設定 H1 的文字內容
+                    if (data.galleryTitle) {
+                        mainTitleElement.textContent = data.galleryTitle;
+                    } else {
+                        mainTitleElement.textContent = "我的藝廊"; // 提供一個預設 H1 標題
+                    }
+
+                    // 設定 <title> 的文字內容
+                    if (data.pageTitle) {
+                        document.title = data.pageTitle; // <-- 新增這一行
+                    } else {
+                        document.title = "我的圖片藝廊"; // 提供一個預設頁面標題
+                    }
+
+                    // 處理圖片資料
+                    const images = data.images || []; 
+                    
+                    if (images.length === 0) {
+                        console.warn("images.json 中沒有圖片資料。");
+                        galleryContainer.innerHTML = "<p style='text-align:center; color:#888;'>沒有可顯示的圖片。</p>";
+                    }
+
+                    images.forEach(image => {
+                        const galleryItem = document.createElement('div');
+                        galleryItem.classList.add('gallery-item');
+
+                        const imageWrapper = document.createElement('div');
+                        imageWrapper.classList.add('image-wrapper');
+
+                        const img = document.createElement('img');
+                        img.src = image.path;
+                        img.alt = image.title;
+
+                        imageWrapper.appendChild(img);
+
+                        const infoDiv = document.createElement('div');
+                        infoDiv.classList.add('image-info');
+
+                        const titleH3 = document.createElement('h3');
+                        titleH3.textContent = image.title;
+
+                        const descriptionP = document.createElement('p');
+                        descriptionP.textContent = image.description;
+
+                        infoDiv.appendChild(titleH3);
+                        infoDiv.appendChild(descriptionP);
+
+                        galleryItem.appendChild(imageWrapper);
+                        galleryItem.appendChild(infoDiv);
+
+                        galleryItem.addEventListener('click', () => {
+                            lightbox.style.display = 'block';
+                            lightboxImg.src = image.path;
+                            lightboxImg.alt = image.title;
+                            lightboxCaption.innerHTML = `<h3>${image.title}</h3><p>${image.description}</p>`;
+                        });
+
+                        galleryContainer.appendChild(galleryItem);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading or parsing images.json:', error);
+                    mainTitleElement.textContent = "藝廊載入失敗"; 
+                    document.title = "載入失敗！"; // 載入失敗時也更新 title
+                    galleryContainer.innerHTML = `<p style='text-align:center; color:red;'>載入圖片資料失敗：${error.message}。請確認 images.json 檔案存在且格式正確。</p>`;
+                });
+
+            // 點擊關閉按鈕關閉 lightbox
+            closeButton.addEventListener('click', () => {
+                lightbox.style.display = 'none';
+            });
+
+            // 點擊 lightbox 外部區域關閉 lightbox
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) {
+                    lightbox.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
